@@ -1,10 +1,3 @@
-<style>
-  /* 隐藏预览和导出时的标题横线 */
-  h1, h2, h3 { 
-    border-bottom: none !important; 
-  }
-</style>
-
 # METHODS.md — 方法说明书
 **BPLL 项目 | 版本 v1.0 | 2026-07-08**
 

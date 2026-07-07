@@ -1,10 +1,3 @@
-<style>
-  /* 隐藏预览和导出时的标题横线 */
-  h1, h2, h3 { 
-    border-bottom: none !important; 
-  }
-</style>
-
 # 编码手册 Codebook v1
 
 **美妆品牌购买合法性词典项目（BPLL）**
