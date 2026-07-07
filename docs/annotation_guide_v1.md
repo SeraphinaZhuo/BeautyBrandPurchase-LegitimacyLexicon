@@ -1,7 +1,3 @@
-<style>
-  h1, h2, h3 { border-bottom: none !important; }
-</style>
-
 # 标注指南
 **BPLL 项目 | 版本 v1.0**
 
