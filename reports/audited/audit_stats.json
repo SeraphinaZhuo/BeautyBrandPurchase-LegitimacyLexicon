@@ -1,0 +1,90 @@
+{
+  "n_seed_words": 158,
+  "n_corpus_absent": 12,
+  "n_sparse": 49,
+  "coverage": {
+    "weibo_main": {
+      "n_docs": 6646,
+      "l1_coverage": 0.2078,
+      "l2_coverage": 0.263,
+      "any_coverage": 0.4082
+    },
+    "xhs_notes": {
+      "n_docs": 60,
+      "l1_coverage": 0.3333,
+      "l2_coverage": 0.8333,
+      "any_coverage": 0.9
+    },
+    "xhs_comments": {
+      "n_docs": 700,
+      "l1_coverage": 0.17,
+      "l2_coverage": 0.2886,
+      "any_coverage": 0.3986
+    }
+  },
+  "per_category": [
+    {
+      "layer": "L1",
+      "category": "信号型",
+      "n_words": 23,
+      "total_hits": 274,
+      "n_prior_driven": 13
+    },
+    {
+      "layer": "L1",
+      "category": "功效型",
+      "n_words": 37,
+      "total_hits": 2621,
+      "n_prior_driven": 4
+    },
+    {
+      "layer": "L2",
+      "category": "割舍挣扎",
+      "n_words": 10,
+      "total_hits": 100,
+      "n_prior_driven": 4
+    },
+    {
+      "layer": "L2",
+      "category": "国货红利",
+      "n_words": 9,
+      "total_hits": 141,
+      "n_prior_driven": 2
+    },
+    {
+      "layer": "L2",
+      "category": "安全恐慌",
+      "n_words": 21,
+      "total_hits": 1692,
+      "n_prior_driven": 3
+    },
+    {
+      "layer": "L2",
+      "category": "摆烂虚无",
+      "n_words": 10,
+      "total_hits": 54,
+      "n_prior_driven": 8
+    },
+    {
+      "layer": "L2",
+      "category": "替代转投",
+      "n_words": 8,
+      "total_hits": 648,
+      "n_prior_driven": 2
+    },
+    {
+      "layer": "L2",
+      "category": "理性辩护",
+      "n_words": 20,
+      "total_hits": 237,
+      "n_prior_driven": 12
+    },
+    {
+      "layer": "L2",
+      "category": "立场抵制",
+      "n_words": 20,
+      "total_hits": 646,
+      "n_prior_driven": 13
+    }
+  ]
+}

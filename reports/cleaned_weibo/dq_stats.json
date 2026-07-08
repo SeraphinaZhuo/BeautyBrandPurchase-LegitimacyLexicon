@@ -1,0 +1,50 @@
+{
+  "input_rows": 31677,
+  "R1_duplicates_removed": 23557,
+  "R6_offtopic_removed": 5,
+  "R2_promo_removed": 462,
+  "R3_lowinfo_removed": 223,
+  "R4_institutional_split": 784,
+  "main_sample_rows": 6646,
+  "AUDIT_promo_rows_containing_crisis_words": 10,
+  "main_sample_brand_x_period": {
+    "SK-II": {
+      "T0": 238,
+      "T1": 356,
+      "T2": 270
+    },
+    "珀莱雅": {
+      "T0": 140,
+      "T1": 389,
+      "T2": 168
+    },
+    "花王": {
+      "T0": 150,
+      "T1": 464,
+      "T2": 259
+    },
+    "蜂花": {
+      "T0": 129,
+      "T1": 605,
+      "T2": 278
+    },
+    "资生堂": {
+      "T0": 753,
+      "T1": 1490,
+      "T2": 957
+    }
+  },
+  "main_sample_content_type": {
+    "热门评论": 4704,
+    "主贴正文": 1942
+  },
+  "crisis_flag_share": 0.0807,
+  "huaxizi_flag_count_fenghua": 70,
+  "promo_share_by_brand": {
+    "SK-II": 0.0292,
+    "珀莱雅": 0.2043,
+    "花王": 0.1009,
+    "蜂花": 0.0524,
+    "资生堂": 0.0312
+  }
+}
