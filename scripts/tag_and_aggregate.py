@@ -23,11 +23,11 @@ Usage:
 
 Command:
     placebo shuffle:
-        python .\scripts\tag_and_aggregate.py --data .\input\cleaned_weibo\main_sample.csv --seeds .\lexicon\audit\seed_words_v0_audited.csv --outdir .\report\shuffle --placebo shuffle
+        python .\scripts\tag_and_aggregate.py --data .\reports\cleaned_weibo\main_sample.csv --seeds .\reports\audited\seed_words_v0_audited.csv --outdir .\data\shuffle --placebo shuffle
     placebo t0-only:
-        python .\scripts\tag_and_aggregate.py --data .\input\cleaned_weibo\main_sample.csv --seeds .\lexicon\audit\seed_words_v0_audited.csv --outdir .\report\t0only --placebo t0-only
+        python .\scripts\tag_and_aggregate.py --data .\reports\cleaned_weibo\main_sample.csv --seeds .\reports\audited\seed_words_v0_audited.csv --outdir .\data\t0only --placebo t0-only
     unseal:
-        python .\scripts\tag_and_aggregate.py --data .\input\cleaned_weibo\main_sample.csv --seeds .\lexicon\audit\seed_words_v0_audited.csv --outdir .\report\unseal --unseal
+        python .\scripts\tag_and_aggregate.py --data .\reports\cleaned_weibo\main_sample.csv --seeds .\reports\audited\seed_words_v0_audited.csv --outdir .\data\unseal --unseal
 """
 
 import argparse

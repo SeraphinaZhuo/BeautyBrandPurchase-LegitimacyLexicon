@@ -27,7 +27,7 @@ Usage:
     python sample_for_annotation.py --data main_sample.csv --outdir annotation/
 
 Command:
-    python .\scripts\sample_for_annotation.py --data .\input\cleaned_weibo\main_sample.csv --outdir .\data\annotation/
+    python .\scripts\sample_for_annotation.py --data .\reports\cleaned_weibo\main_sample.csv --outdir .\data\annotation/
 """
 
 import argparse

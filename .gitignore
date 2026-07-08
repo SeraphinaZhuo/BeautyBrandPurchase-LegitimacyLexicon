@@ -1,7 +1,9 @@
 # Ignore raw/input data files
 input/
 data/
-
+# 清洗输出中含原文的文件不上传,仅公开统计报告
+reports/cleaned_weibo/*.csv
+reports/audited/*tagged*.csv
 # Python cache
 __pycache__/
 *.py[cod]

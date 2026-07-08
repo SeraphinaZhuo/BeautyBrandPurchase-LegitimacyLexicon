@@ -18,7 +18,7 @@ Usage:
         --outdir audit_dir
 
 Command:
-    python .\scripts\audit_seed_words.py --seeds .\lexicon\seed_words_v0.csv --weibo .\input\cleaned_weibo\main_sample.csv --xhs-notes .\input\xhs_notes_data.xlsx --xhs-comments .\input\xhs_comments_data.xlsx --outdir .\lexicon\audit
+    python .\scripts\audit_seed_words.py --seeds .\lexicon\seed_words_v0.csv --weibo .\reports\cleaned_weibo\main_sample.csv --xhs-notes .\input\xhs_notes_data.xlsx --xhs-comments .\input\xhs_comments_data.xlsx --outdir .\reports\audited
 
 Outputs:
     seed_words_v0_audited.csv  <- original columns + hit counts + flags

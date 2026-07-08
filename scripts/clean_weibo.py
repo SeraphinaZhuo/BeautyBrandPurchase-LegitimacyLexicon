@@ -18,7 +18,7 @@ Usage:
     python clean_weibo.py --input weibo_beauty_crisis_data.csv --outdir cleaned
 
 Command:
-    python .\scripts\clean_weibo.py --input .\input\weibo_beauty_crisis_data.csv --outdir input/cleaned_weibo
+    python .\scripts\clean_weibo.py --input .\input\weibo_beauty_crisis_data.csv --outdir reports/cleaned_weibo
 
 Outputs (all CSV, UTF-8):
     main_sample.csv           <- analysis-ready ordinary-user sample
