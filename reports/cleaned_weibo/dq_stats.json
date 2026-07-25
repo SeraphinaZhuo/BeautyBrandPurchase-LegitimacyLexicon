@@ -4,47 +4,56 @@
   "R6_offtopic_removed": 5,
   "R2_promo_removed": 462,
   "R3_lowinfo_removed": 223,
+  "R8_R12_residual_noise_removed": 1276,
+  "R8_R12_breakdown": {
+    "R12_reply_fragment": 1144,
+    "R11_hashtag_promo": 80,
+    "R10_giveaway_participation": 22,
+    "R9_image_dependent": 16,
+    "R8_newswire_repost": 14
+  },
+  "AUDIT_R9_R12_rows_containing_stance_words": 17,
   "R4_institutional_split": 784,
-  "main_sample_rows": 6646,
+  "main_sample_rows": 5370,
   "AUDIT_promo_rows_containing_crisis_words": 10,
   "main_sample_brand_x_period": {
     "SK-II": {
-      "T0": 238,
-      "T1": 356,
-      "T2": 270
+      "T0": 172,
+      "T1": 315,
+      "T2": 193
     },
     "珀莱雅": {
-      "T0": 140,
-      "T1": 389,
-      "T2": 168
+      "T0": 110,
+      "T1": 288,
+      "T2": 112
     },
     "花王": {
-      "T0": 150,
-      "T1": 464,
-      "T2": 259
+      "T0": 123,
+      "T1": 380,
+      "T2": 206
     },
     "蜂花": {
-      "T0": 129,
-      "T1": 605,
-      "T2": 278
+      "T0": 115,
+      "T1": 525,
+      "T2": 233
     },
     "资生堂": {
-      "T0": 753,
-      "T1": 1490,
-      "T2": 957
+      "T0": 586,
+      "T1": 1267,
+      "T2": 745
     }
   },
   "main_sample_content_type": {
-    "热门评论": 4704,
-    "主贴正文": 1942
+    "热门评论": 3525,
+    "主贴正文": 1845
   },
-  "crisis_flag_share": 0.0807,
-  "huaxizi_flag_count_fenghua": 70,
+  "crisis_flag_share": 0.0983,
+  "huaxizi_flag_count_fenghua": 66,
   "promo_share_by_brand": {
-    "SK-II": 0.0292,
-    "珀莱雅": 0.2043,
-    "花王": 0.1009,
-    "蜂花": 0.0524,
-    "资生堂": 0.0312
+    "SK-II": 0.0368,
+    "珀莱雅": 0.2598,
+    "花王": 0.1214,
+    "蜂花": 0.0603,
+    "资生堂": 0.0381
   }
 }

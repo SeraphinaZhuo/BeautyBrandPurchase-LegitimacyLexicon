@@ -15,7 +15,7 @@ Design principles:
     that avoid any single obvious keyword still get caught.
 
 Usage:
-    python clean_weibo.py --input weibo_beauty_crisis_data.csv --outdir cleaned
+    python clean_weibo.py --input weibo_beauty_crisis_data.csv --outdir cleaned/
 
 Command:
     python .\scripts\clean_weibo.py --input .\input\weibo_beauty_crisis_data.csv --outdir reports/cleaned_weibo
@@ -166,11 +166,87 @@ def is_kao_offtopic(brand: str, text: str) -> bool:
     return bool(KAO_OFFTOPIC_RE.search(text)) and not KAO_PRODUCT_RE.search(text)
 
 
+CRISIS_RE = re.compile(r"核污水|核废水|核污染|排海|核辐射|辐射|福岛")
+
+# ---------------------------------------------------------------------------
+# R8-R12. Residual-noise rules (added in v2 of this script)
+# ---------------------------------------------------------------------------
+# Derived from the trial-annotation round: three annotators, blind to the
+# project hypotheses, independently flagged ~52% of a 50-item sample as
+# unusable. Their flags fall into recurring, rule-expressible patterns.
+# Each rule below targets one such pattern. As with R1-R6, rows are MOVED to
+# an archive with a rule label, never deleted.
+
+# R8. News-wire reposts by ordinary users. Weibo headline syntax is
+#     【#topic#: body】 -- institutional copy that ordinary accounts repost
+#     verbatim, carrying no personal stance. R4 only catches it when the
+#     poster is a verified account.
+NEWSWIRE_RE = re.compile(r"^\s*【\s*#[^#]{2,40}#")
+
+# R9. Comments that depend on an image / video the corpus does not contain.
+#     Structurally unannotatable rather than off-topic; kept separate so the
+#     limitation can be reported rather than silently absorbed.
+IMAGE_DEP_RE = re.compile(
+    r"图[一二三四五六七八九十\d]|[第最][一二三四五六七八九十\d]+张|"
+    r"最后一张|上图|下图|这个?视频|视频里|楼上图|看图"
+)
+
+# R10. Giveaway / queue-jumping participation ("扣1", "扣2", "蹲一个").
+#      Distinct from R2 promo: these are *readers* joining a giveaway, not
+#      sellers advertising, so they carry none of R2's seller vocabulary.
+LOTTERY_PART_RE = re.compile(r"扣\s*[1-9１-９一二三四五六七八九⃣]|蹲一?个|蹲蹲|想蹲|求扣")
+
+# R11. Hashtag-stuffed promotional copy that survives R2 because it avoids
+#      explicit seller vocabulary. Three or more hashtags plus any commercial
+#      cue is the signature.
+PROMO_CUE_RE = re.compile(r"推荐|必收|种草|好物|清单|安利|榜单|测评|囤|入手")
+
+# R12. Reply fragments: very short comments whose meaning lives entirely in a
+#      parent comment the corpus does not contain ("谢谢！掉了", "俩都没试过").
+#      Guarded so that short-but-substantive posts survive: a row is a fragment
+#      ONLY if it is short AND contains no topical token at all.
+TOPICAL_RE = re.compile(
+    r"核|辐射|排海|福岛|日本|日货|抵制|国货|成分|敏感|烂脸|过敏|痘|保湿|防晒|"
+    r"美白|抗老|退|买|用|贵|便宜|平替|资生堂|花王|蜂花|珀莱雅|SK|安耐晒|"
+    r"神仙水|红腰子|大红瓶|蓝胖子|小金瓶|性价比|好用|难用|推荐|划算|"
+    r"收购|涨价|降价|停产|替代", re.IGNORECASE)
+FRAGMENT_MAX_LEN = 8
+
+
+# Guards (added after reviewing the first run of R8-R12):
+#   * Crisis-bearing rows are exempt from R9-R12. Posts that mention the event
+#     are the corpus's most valuable content; a surface noise feature must not
+#     override that. R8 is exempt from the exemption: a news-wire repost is
+#     institutional copy regardless of whether it mentions the crisis.
+#   * R9/R10 additionally require the post to be SHORT. A long product review
+#     that happens to say "图一" still carries plenty of annotatable text; only
+#     a brief comment genuinely lives inside the image it points at.
+R9_MAX_LEN = 15
+R10_MAX_LEN = 15
+
+
+def residual_noise_rule(text: str):
+    """Return the first matching residual-noise rule label, or None."""
+    if NEWSWIRE_RE.search(text):
+        return "R8_newswire_repost"
+    if CRISIS_RE.search(text):
+        return None
+    eff = effective_length(text)
+    if eff <= R9_MAX_LEN and IMAGE_DEP_RE.search(text):
+        return "R9_image_dependent"
+    if eff <= R10_MAX_LEN and LOTTERY_PART_RE.search(text):
+        return "R10_giveaway_participation"
+    if len(HASHTAG_RE.findall(text)) >= 3 and PROMO_CUE_RE.search(text):
+        return "R11_hashtag_promo"
+    if eff <= FRAGMENT_MAX_LEN and not TOPICAL_RE.search(text):
+        return "R12_reply_fragment"
+    return None
+
+
 # ---------------------------------------------------------------------------
 # R7. Analysis flags (added as columns; rows are NOT removed)
 # ---------------------------------------------------------------------------
 
-CRISIS_RE = re.compile(r"核污水|核废水|核污染|排海|核辐射|辐射|福岛")
 HUAXIZI_RE = re.compile(r"花西子|李佳琦|佳琦|眉笔|79元|79块")
 GUOCHAO_RE = re.compile(r"国货|国产|国牌")
 
@@ -194,7 +270,7 @@ def template_prefixes(texts: pd.Series, prefix_len: int = 30, min_count: int = 3
 
 def run(input_path: Path, outdir: Path) -> dict:
     outdir.mkdir(parents=True, exist_ok=True)
-    df = pd.read_csv(input_path, encoding="utf-8-sig")
+    df = pd.read_csv(input_path)
     n0 = len(df)
 
     df["text_norm"] = df["text_content"].map(normalize_text)
@@ -243,6 +319,13 @@ def run(input_path: Path, outdir: Path) -> dict:
     archive_low["exclusion_rule"] = "R3_low_information"
     df = df[~low_mask].copy()
 
+    # ---- R8-R12: residual noise (ordinary users only, after R3) -----------
+    resid = df["text_norm"].map(residual_noise_rule)
+    resid_mask = resid.notna()
+    archive_resid = df[resid_mask].copy()
+    archive_resid["exclusion_rule"] = resid[resid_mask].values
+    df = df[~resid_mask].copy()
+
     # ---- R7: flags --------------------------------------------------------
     for frame in (df, sample_inst):
         frame["crisis_flag"] = frame["text_norm"].str.contains(CRISIS_RE).astype(int)
@@ -257,13 +340,14 @@ def run(input_path: Path, outdir: Path) -> dict:
         a.drop(columns=["_strong", "_weak", "_template"], inplace=True, errors="ignore")
 
     # ---- write outputs ----------------------------------------------------
-    df.to_csv(outdir / "main_sample.csv", index=False, encoding="utf-8-sig")
+    df.to_csv(outdir / "main_sample.csv", index=False)
     sample_inst.drop(columns=["_strong", "_weak", "_template"], errors="ignore").to_csv(
-    outdir / "sample_institutional.csv", index=False, encoding="utf-8-sig")
-    archive_dup.to_csv(outdir / "archive_duplicates.csv", index=False, encoding="utf-8-sig")
-    archive_promo.to_csv(outdir / "archive_promo.csv", index=False, encoding="utf-8-sig")
-    archive_low.to_csv(outdir / "archive_lowinfo.csv", index=False, encoding="utf-8-sig")
-    archive_off.to_csv(outdir / "archive_offtopic.csv", index=False, encoding="utf-8-sig")
+        outdir / "sample_institutional.csv", index=False)
+    archive_dup.to_csv(outdir / "archive_duplicates.csv", index=False)
+    archive_promo.to_csv(outdir / "archive_promo.csv", index=False)
+    archive_low.to_csv(outdir / "archive_lowinfo.csv", index=False)
+    archive_off.to_csv(outdir / "archive_offtopic.csv", index=False)
+    archive_resid.to_csv(outdir / "archive_residual_noise.csv", index=False)
 
     # ---- stats -------------------------------------------------------------
     def brand_period(frame):
@@ -278,6 +362,12 @@ def run(input_path: Path, outdir: Path) -> dict:
         "R6_offtopic_removed": int(len(archive_off)),
         "R2_promo_removed": int(len(archive_promo)),
         "R3_lowinfo_removed": int(len(archive_low)),
+        "R8_R12_residual_noise_removed": int(len(archive_resid)),
+        "R8_R12_breakdown": {k: int(v) for k, v in
+                             archive_resid["exclusion_rule"].value_counts().items()},
+        "AUDIT_R9_R12_rows_containing_stance_words": int(
+            archive_resid[archive_resid["exclusion_rule"] != "R8_newswire_repost"]
+            ["text_norm"].str.contains(r"日本|小日子|抵制|国货", na=False).sum()),
         "R4_institutional_split": int(len(sample_inst)),
         "main_sample_rows": int(len(df)),
         "AUDIT_promo_rows_containing_crisis_words": int(
@@ -305,6 +395,7 @@ def run(input_path: Path, outdir: Path) -> dict:
     report.append(f"| R6 品牌词误命中(花王) | {len(archive_off)} | archive_offtopic.csv |")
     report.append(f"| R2 广告/带货/抽奖 | {len(archive_promo)} | archive_promo.csv |")
     report.append(f"| R3 无信息内容 | {len(archive_low)} | archive_lowinfo.csv |")
+    report.append(f"| R8-R12 残余噪音 | {len(archive_resid)} | archive_residual_noise.csv |")
     report.append(f"| R4 机构账号分流 | {len(sample_inst)} | sample_institutional.csv |")
     report.append(f"\n**主样本（普通用户）：{len(df)} 条**\n")
     report.append("## 主样本 品牌 × 时段\n")
