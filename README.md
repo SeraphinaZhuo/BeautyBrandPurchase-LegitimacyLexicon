@@ -1,3 +1,7 @@
+Pilot human validation revealed conceptual overlap between purchase drivers, crisis responses and behavioral outcomes. 
+Version 2 is currently being redesigned as a hierarchical LLM-assisted annotation framework. 
+The v1 materials remain available for transparency but should not be treated as final results.
+
 # Beauty Brand Purchase-Legitimacy Lexicon（BPLL）
 ## **美妆品牌购买合法性词典 —— 危机下品牌资产韧性的话语测量**
 ### ver 1.0
