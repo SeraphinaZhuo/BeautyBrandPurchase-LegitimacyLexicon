@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SeraphinaZhuo/BeautyBrandPurchase-LegitimacyLexicon/blob/main/docs/annotation_schema_v2.json",
+  "title": "BPLL v2 annotation batch",
+  "description": "一条社交媒体发言×目标品牌的证据约束结构化标注。E3推断不得进入标签数组。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "model_name",
+    "annotations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "annotations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/annotation"
+      }
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "quote",
+        "evidence_level"
+      ],
+      "properties": {
+        "quote": {
+          "type": "string",
+          "description": "从本条text_content逐字复制的最短证据；无直接证据时为空字符串。"
+        },
+        "evidence_level": {
+          "enum": [
+            "E1",
+            "E2",
+            null
+          ],
+          "description": "E1直接表达；E2同一文本多句共同支持；无可用证据时null。E3不得作为gold标签证据。"
+        }
+      }
+    },
+    "multiEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "quote",
+        "evidence_level"
+      ],
+      "properties": {
+        "code": {
+          "enum": [
+            "T1",
+            "T2",
+            "T3",
+            "T4",
+            "T5",
+            "T6",
+            "T7",
+            "MR1",
+            "MR2",
+            "MR3",
+            "MR4",
+            "MR5",
+            "MR6",
+            "MR7",
+            "MX1",
+            "MX2",
+            "MX3",
+            "MX4",
+            "MX5",
+            "MX6",
+            "MX7",
+            "MX8",
+            "D1",
+            "D2",
+            "D3",
+            "D4"
+          ]
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_level": {
+          "enum": [
+            "E1",
+            "E2"
+          ]
+        }
+      }
+    },
+    "annotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "target_brand",
+        "voice_code",
+        "voice_evidence",
+        "relationship_code",
+        "relationship_evidence",
+        "outcome_code",
+        "outcome_evidence",
+        "transition_codes",
+        "retention_mechanism_codes",
+        "exit_mechanism_codes",
+        "discourse_codes",
+        "multi_label_evidence",
+        "annotation_confidence",
+        "uncertainty_note",
+        "e3_hypothesis_note"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_brand": {
+          "enum": [
+            "资生堂",
+            "SK-II",
+            "花王"
+          ]
+        },
+        "voice_code": {
+          "enum": [
+            "V1",
+            "V2",
+            "V3",
+            "V4"
+          ]
+        },
+        "voice_evidence": {
+          "$ref": "#/$defs/evidence"
+        },
+        "relationship_code": {
+          "enum": [
+            "R1",
+            "R2",
+            "R3",
+            "R4",
+            "R5"
+          ]
+        },
+        "relationship_evidence": {
+          "$ref": "#/$defs/evidence"
+        },
+        "outcome_code": {
+          "enum": [
+            "O1",
+            "O2",
+            "O3",
+            "O4",
+            "O5",
+            "O6",
+            "O7"
+          ]
+        },
+        "outcome_evidence": {
+          "$ref": "#/$defs/evidence"
+        },
+        "transition_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "T1",
+              "T2",
+              "T3",
+              "T4",
+              "T5",
+              "T6",
+              "T7"
+            ]
+          }
+        },
+        "retention_mechanism_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "MR1",
+              "MR2",
+              "MR3",
+              "MR4",
+              "MR5",
+              "MR6",
+              "MR7"
+            ]
+          }
+        },
+        "exit_mechanism_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "MX1",
+              "MX2",
+              "MX3",
+              "MX4",
+              "MX5",
+              "MX6",
+              "MX7",
+              "MX8"
+            ]
+          }
+        },
+        "discourse_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "D1",
+              "D2",
+              "D3",
+              "D4"
+            ]
+          }
+        },
+        "multi_label_evidence": {
+          "type": "array",
+          "description": "每个入选T/MR/MX/D代码恰好对应一项证据；不得为未入选代码补证据。",
+          "items": {
+            "$ref": "#/$defs/multiEvidence"
+          }
+        },
+        "annotation_confidence": {
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "uncertainty_note": {
+          "type": "string"
+        },
+        "e3_hypothesis_note": {
+          "type": "string",
+          "description": "可保留但不得进入gold标签的E3推断；没有则为空字符串。"
+        }
+      }
+    }
+  }
+}
