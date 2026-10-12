@@ -4,6 +4,7 @@ data/private/
 data/interim/
 data/demo_v2_36_input.json
 **/demo_v2_36_input.json
+Gemini-demo/
 
 # Human reference annotations and model runs containing original text
 reports/validation_v2/reference/
