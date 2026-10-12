@@ -1,24 +1,41 @@
-# Ignore raw/input data files
-input/
-data/
-reports/cleaned_weibo/*.csv
-reports/audited/*tagged*.csv
-# Python cache
+# Private source data and derived row-level text
+data/raw/
+data/private/
+data/interim/
+data/demo_v2_36_input.json
+**/demo_v2_36_input.json
+Gemini-demo/
+
+# Human reference annotations and model runs containing original text
+reports/validation_v2/reference/
+reports/validation_v2/runs/
+reports/validation_v2/private/
+*研究者标注表*.xlsx
+*reference*.xlsx
+*reference*.json
+
+# Local audit material that can link back to source rows
+*manifest*.csv
+*.inspect.ndjson
+*.sha256
+
+# Office, operating-system, and Python temporary files
+~$*
+.DS_Store
+Thumbs.db
 __pycache__/
 *.py[cod]
+.pytest_cache/
 
-# Pipeline outputs (contain post text; never commit)
-run_log.jsonl
-PLACEBO_*
-pipeline_out/
-
-# Environment files
+# Local environments and secrets
 .env
+.env.*
+!.env.example
 .venv/
 venv/
 
-# OS/editor files
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
+# Generated scratch output
+tmp/
+work/
+*.log
+

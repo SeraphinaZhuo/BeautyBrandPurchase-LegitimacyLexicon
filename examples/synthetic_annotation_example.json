@@ -1,0 +1,28 @@
+{
+  "schema_version": "2.0",
+  "run_id": "synthetic_example",
+  "model_name": "human-authored-example",
+  "annotations": [
+    {
+      "record_id": "SYNTHETIC-001",
+      "target_brand": "SK-II",
+      "voice_code": "V1",
+      "voice_evidence": {"quote": "以前一直用神仙水", "evidence_level": "E1"},
+      "relationship_code": "R1",
+      "relationship_evidence": {"quote": "以前一直用神仙水", "evidence_level": "E1"},
+      "outcome_code": "O2",
+      "outcome_evidence": {"quote": "还没决定要不要继续买", "evidence_level": "E1"},
+      "transition_codes": ["T2"],
+      "retention_mechanism_codes": [],
+      "exit_mechanism_codes": [],
+      "discourse_codes": [],
+      "multi_label_evidence": [
+        {"code": "T2", "quote": "正在找替代品", "evidence_level": "E1"}
+      ],
+      "annotation_confidence": "high",
+      "uncertainty_note": "",
+      "e3_hypothesis_note": ""
+    }
+  ]
+}
+
